@@ -5,7 +5,7 @@ How To Style Your GTK4 Rust App With CSS
 
 _(Originally published at https://jamesbenner.hashnode.dev/how-to-style-your-gtk4-rust-app-with-css)_
 
-GTK apps look pretty nice by default but sometimes you may want to customize the looks of them. In this article, we'll go over how to do so using CSS. Basic knowledge of CSS is assumed for this article but if you're not familiar with it MDN has great resources for it [here](https://developer.mozilla.org/en-US/docs/Web/CSS).
+GTK apps look pretty nice by default but sometimes you may want to customize the looks of them. In this article, we'll go over how to do so using CSS. Basic knowledge of CSS is assumed for this article but if you're not familiar with it MDN has great resources [here](https://developer.mozilla.org/en-US/docs/Web/CSS).
 
 ## Adding CSS Styling
 
@@ -99,7 +99,7 @@ fn on_activate(application: &gtk::Application) {
 }
 ```
 
-I've omitted the `main()` function from this snippet since nothing changed there. Now that we've made these changes let',s run `cargo run` again and see how it looks now.
+I've omitted the `main()` function from this snippet since nothing changed there. Now that we've made these changes let's run `cargo run` again and see how it looks now.
 
 <div align="center">
     <img src="images/light-mode.png">
@@ -107,9 +107,9 @@ I've omitted the `main()` function from this snippet since nothing changed there
 
 We've got a splash of color now! So let's look at the `load_css()` function we just added and walk through it.
 
-First, we get the default display via [`gdk::Display::default()`](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gdk4/struct.Display.html#method.default) since we'll need that to attach our CSS provider to it. Second, we instantiate our CSS provider via [`gtk::CssProvider::new()`](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gtk4/struct.CssProvider.html#method.new), like its name suggests we'll load our CSS into it and it will provide it to our display. And for our third and last variable declaration, we're defining the priority of our style context. We're using [`gtk::STYLE_PROVIDER_PRIORITY_APPLICATION`](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gtk4/constant.STYLE_PROVIDER_PRIORITY_APPLICATION.html) but there are other priorities available as well that you can find [here](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gdk4/index.html?search=gtk4%3A%3ASTYLE_PROVIDER_PRIORITY) for reference. Now we load our CSS into our provider using [`gtk::StyleContext::add_provider_for_display()`](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gtk4/struct.StyleContext.html#method.add_provider_for_display), here we're utilizing Rust's [`include_str!()`](https://doc.rust-lang.org/std/macro.include_str.html) macro which will load the file contents into a `&'static str` at compile time. Please note that the path provided to `include_str!()` isn't normalized at all so if you are on Windows you'd need to use the appropriate path syntax. Lastly, we use [`gtk::StyleContext::add_provider_for_display()`](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gtk4/struct.StyleContext.html#method.add_provider_for_display) to attach our CSS provider to our display and set its priority.
+First, we get the default display via [`gdk::Display::default()`](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gdk4/struct.Display.html#method.default) since we'll need that to attach our CSS provider to it. Second, we instantiate our CSS provider via [`gtk::CssProvider::new()`](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gtk4/struct.CssProvider.html#method.new), like its name suggests we'll load our CSS into it and it will provide it to our display. And for our third and final variable declaration, we're defining the priority of our style context. We're using [`gtk::STYLE_PROVIDER_PRIORITY_APPLICATION`](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gtk4/constant.STYLE_PROVIDER_PRIORITY_APPLICATION.html) but there are other priorities available as well that you can find [here](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gdk4/index.html?search=gtk4%3A%3ASTYLE_PROVIDER_PRIORITY) for reference. Now we load our CSS into our provider using [`gtk::StyleContext::add_provider_for_display()`](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gtk4/struct.StyleContext.html#method.add_provider_for_display), here we're utilizing Rust's [`include_str!()`](https://doc.rust-lang.org/std/macro.include_str.html) macro which will load the file contents into a `&'static str` at compile time. Please note that the path provided to `include_str!()` isn't normalized at all so if you are on Windows you'd need to use the appropriate path syntax. Lastly, we use [`gtk::StyleContext::add_provider_for_display()`](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gtk4/struct.StyleContext.html#method.add_provider_for_display) to attach our CSS provider to our display and set its priority.
 
-## Adding CSS Classes and IDs
+## Adding Classes and IDs
 
 We've got our basic styling in place but what if we need to get more specific with our selectors than using nodes like `label`? Then we'll need to be able to add classes and IDs to our widgets. Let's start by adding a class to our label in `src/main.rs`. We're only showing the `on_activate()` function since that's the only code that has been changed.
 
@@ -219,7 +219,7 @@ Let's change our system to prefer a dark theme and run `cargo run` again to see 
 
 As you can see GTK automatically adjusts the color of our background and title bar without us doing anything so we get some changes for free with our customization.
 
-So what did we do to get here? Well first off we changed the function signature of `load_css()`, you'll notice it now takes a reference to a [`gtk::Settings`](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gtk4/struct.Settings.html) instance as a parameter. That's because we're going to use it to look up a couple of things. For instance, you'll notice we've added a `theme_name` variable that we've pulled from settings. We've also moved loading CSS into our provider into an `if` statement. We're checking to see if the lowercased theme name contains the word "dark" or if the [`gtk-application-prefer-dark-theme`](https://docs.gtk.org/gtk4/property.Settings.gtk-application-prefer-dark-theme.html) setting is `true`, then we load our dark style sheet otherwise we load our light style sheet.
+So what did we do to get here? Well first off we changed the function signature of `load_css()`, you'll notice it now takes a reference to a [`gtk::Settings`](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gtk4/struct.Settings.html) instance as a parameter. That's because we're going to use it to look up a couple of things. For instance, you'll notice we've added a `theme_name` variable that we've pulled from settings. We've also moved loading CSS into our provider into an `if` statement. We're checking to see if the lowercase theme name contains the word "dark" or if the [`gtk-application-prefer-dark-theme`](https://docs.gtk.org/gtk4/property.Settings.gtk-application-prefer-dark-theme.html) setting is `true`, then we load our dark style sheet otherwise we load our light style sheet.
 
 ## Dynamic Light/Dark Mode Support
 
@@ -252,7 +252,7 @@ fn on_activate(application: &gtk::Application) {
 }
 ```
 
-All we needed to change was that we call the [`connect_gtk_application_prefer_dark_theme_notify()`](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gtk4/struct.Settings.html#method.connect_gtk_application_prefer_dark_theme_notify) and [`connect_gtk_theme_name_notify()`](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gtk4/struct.Settings.html#method.connect_gtk_theme_name_notify) methods on our `settings` object while passing the `load_css` function to them as a callback argument. This, as their names imply, will fire off when the dark theme preference or theme name changes and reloads our CSS.
+All we needed to change was that we call the [`connect_gtk_application_prefer_dark_theme_notify()`](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gtk4/struct.Settings.html#method.connect_gtk_application_prefer_dark_theme_notify) and [`connect_gtk_theme_name_notify()`](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gtk4/struct.Settings.html#method.connect_gtk_theme_name_notify) methods on our `settings` object while passing the `load_css` function to them as a callback argument. These, as their names imply, will fire off when the dark theme preference or theme name changes and reloads our CSS.
 
 ## Conclusion
 
